@@ -2,6 +2,8 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { createSnapshot } from './snapshot.js';
 import { sha256, stableJson, signJson, verifyJson, loadOrCreateKeyPair, fingerprint, publicKeySpkiB64, publicKeyFromSigner } from './crypto.js';
 
 const PORT = Number(process.env.PORT || 4020);
@@ -609,6 +611,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'OPTIONS') return json(res, 204, null);
 
     const isWriteRoute = req.method === 'POST' && (
+      url.pathname === '/api/snapshot' ||
       url.pathname === '/v1/proof' ||
       url.pathname === '/v1/verify' ||
       url.pathname === '/mcp' ||
@@ -616,6 +619,25 @@ const server = http.createServer(async (req, res) => {
       url.pathname === '/message:send'
     );
     if (isWriteRoute && !rateLimit(req, res, url.pathname)) return;
+
+    if (req.method === 'POST' && url.pathname === '/api/snapshot') {
+      try {
+        const result = await createSnapshot(await body(req));
+        return json(res, 200, result, { 'cache-control': 'no-store' });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Snapshot unavailable.';
+        return json(res, 400, { error: message }, { 'cache-control': 'no-store' });
+      }
+    }
+
+    if (req.method === 'GET' && ['/', '/index.html', '/llms.txt', '/robots.txt', '/audit.html', '/verify.html'].includes(url.pathname)) {
+      const name = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
+      const file = path.resolve(path.join(path.dirname(fileURLToPath(import.meta.url)), '../../web', name));
+      const content = fs.readFileSync(file);
+      const type = name.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain; charset=utf-8';
+      res.writeHead(200, { 'content-type': type, 'cache-control': name === 'index.html' ? 'no-cache' : 'public, max-age=3600' });
+      return res.end(content);
+    }
 
     if (req.method === 'GET' && url.pathname === '/.well-known/agent-card.json') {
       return json(res, 200, a2aCard(`${url.protocol}//${url.host}`), { 'cache-control': 'public, max-age=3600' });

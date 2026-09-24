@@ -1,10 +1,10 @@
 {
-  "name": "machine-commerce-proof",
+  "name": "agentready-machine-commerce-proof",
   "private": true,
   "version": "0.21.1",
   "type": "module",
   "scripts": {
-    "test": "npm --prefix server run selftest",
+    "test": "npm --prefix server run selftest && node tests/agentready-snapshot.js",
     "start": "npm --prefix server start",
     "verify": "node scripts/verify-receipt.mjs",
     "release-check": "node scripts/release-check.mjs",

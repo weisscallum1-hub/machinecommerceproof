@@ -1,7 +1,20 @@
-# Machine Commerce Proof
+# AgentReady
 
-Machine Commerce Proof provides tamper-evident receipts for AI-agent actions.
+AgentReady helps businesses assess public readiness for AI-mediated discovery, trust, agent access, and commerce.
 
-Core concepts: agent identity, action, policy, input hash, output hash, payment correlation, signature, chain verification.
+## Product
+- Free Agent Readiness Snapshot: passive, authorized checks of public website signals. No login, active vulnerability testing, port scanning, form submission, or production changes.
+- Readiness Review: proposed $149 one-time pilot, delivered with human review and a practical action plan.
+- Monitoring: proposed $49/month future plan; not available until customer accounts, persistent monitoring, and alerts are implemented.
 
-The product is protocol-agnostic. x402 is an optional payment adapter; ERC-8004 is an identity/reputation integration target; MCP/A2A are capability/discovery integration targets.
+Scores are directional indicators, not security certifications, search rankings, financial advice, or outcome guarantees. A missing signal is not proof of a vulnerability.
+
+## Interfaces
+- Landing page: /
+- Snapshot API: POST /api/snapshot with {"url":"https://example.com","consent":true}
+- Health: /health
+- Proof API descriptor: /.well-known/agent-proof.json
+- A2A Agent Card: /.well-known/agent-card.json
+
+## Safety
+No autonomous outreach, account access, production changes, payment processing, trading, or transactions are enabled. Human approval is required for consequential actions.
