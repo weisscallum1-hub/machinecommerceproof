@@ -1,0 +1,9 @@
+{
+  "project": "Machine Commerce Proof",
+  "version": "0.21.1",
+  "objective": "Build an open evidence layer for autonomous software actions; financial and token features remain deferred.",
+  "paymentRail": "USDC/x402 adapter",
+  "token": "optional",
+  "proof": "Ed25519 signed + SHA-256 hash-linked receipts",
+  "autonomy": "research/monitoring/drafting allowed; financial/legal/public-commercial gates human-approved"
+}

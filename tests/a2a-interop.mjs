@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import { receiptToA2APart, receiptFromA2APart } from '../sdk/client.mjs';
+const assert=(c,m)=>{if(!c)throw new Error(m)};
+const receipt=JSON.parse(fs.readFileSync(new URL('../examples/receipt.json', import.meta.url),'utf8'));
+const part=receiptToA2APart(receipt);
+assert(part.mediaType==='application/vnd.machine-commerce-proof+json','mediaType mismatch');
+assert(part.data?.type==='machine-commerce-proof/receipt','data type mismatch');
+const roundTripped=receiptFromA2APart(part);
+assert(JSON.stringify(roundTripped)===JSON.stringify(receipt),'receipt roundtrip mismatch');
+const card=JSON.parse(fs.readFileSync(new URL('../examples/a2a-agent-card.json', import.meta.url),'utf8'));
+assert(Array.isArray(card.supportedInterfaces) && card.supportedInterfaces.length>0,'Agent Card missing interfaces');
+assert(card.supportedInterfaces[0].protocolVersion==='1.0','Agent Card protocol version mismatch');
+assert(card.supportedInterfaces[0].protocolBinding==='JSONRPC','Agent Card binding mismatch');
+assert(Array.isArray(card.skills) && card.skills.length>=2,'Agent Card skills missing');
+console.log(JSON.stringify({ok:true,mediaType:part.mediaType,agentCardVersion:card.supportedInterfaces[0].protocolVersion},null,2));

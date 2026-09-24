@@ -1,0 +1,28 @@
+{
+  "name": "machine-commerce-proof",
+  "private": true,
+  "version": "0.21.1",
+  "type": "module",
+  "scripts": {
+    "test": "npm --prefix server run selftest",
+    "start": "npm --prefix server start",
+    "verify": "node scripts/verify-receipt.mjs",
+    "release-check": "node scripts/release-check.mjs",
+    "conformance": "node tests/protocol-conformance.mjs",
+    "interop": "node tests/a2a-interop.mjs",
+    "a2a-service": "node tests/a2a-service.mjs",
+    "official-sdk-interop": "node tests/official-sdk-interop.mjs",
+    "verify-release": "node scripts/verify-release.mjs",
+    "demo": "bash scripts/run-demo.sh",
+    "status": "node scripts/status.mjs",
+    "audit": "node scripts/audit.mjs",
+    "backup": "node scripts/backup-runtime.mjs",
+    "restore-check": "node scripts/restore-runtime.mjs",
+    "recovery-test": "node scripts/recovery-selftest.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "bootstrap-check": "node scripts/bootstrap-check.mjs",
+    "security-test": "node tests/security-hardening.mjs",
+    "docker-preflight": "bash scripts/docker-check.sh",
+    "generate-secrets": "node scripts/generate-secrets.mjs"
+  }
+}

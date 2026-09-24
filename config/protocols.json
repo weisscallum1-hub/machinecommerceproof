@@ -1,0 +1,29 @@
+{
+  "adapters": {
+    "x402": {
+      "role": "payments",
+      "referenceVersion": "2",
+      "spec": "https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md",
+      "mode": "adapter"
+    },
+    "erc8004": {
+      "role": "identity-reputation-validation",
+      "referenceStatus": "draft",
+      "spec": "https://eips.ethereum.org/EIPS/eip-8004",
+      "mode": "adapter"
+    },
+    "mcp": {
+      "role": "tool-capability-interface",
+      "referenceVersion": "2026-07-28",
+      "spec": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/index.mdx",
+      "mode": "implemented-minimal-adapter"
+    },
+    "a2a": {
+      "role": "agent-to-agent",
+      "referenceVersion": "1.0.0",
+      "spec": "https://a2a-protocol.org/v1.0.0/",
+      "mode": "implemented-minimal-sync"
+    }
+  },
+  "designRule": "Do not encode business logic directly against a single protocol when an adapter can isolate it."
+}

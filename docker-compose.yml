@@ -1,0 +1,28 @@
+services:
+  machine-commerce-proof:
+    build: .
+    ports:
+      - "4020:4020"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT:-4020}
+      DATA_DIR: /app/data
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+      PROOF_WRITE_TOKEN: ${PROOF_WRITE_TOKEN:-}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      RATE_LIMIT_ENABLED: ${RATE_LIMIT_ENABLED:-true}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-120}
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-60000}
+      TRUST_PROXY: ${TRUST_PROXY:-false}
+    volumes:
+      - mcp-proof-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4020/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  mcp-proof-data:

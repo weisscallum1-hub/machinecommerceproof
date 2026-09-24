@@ -1,0 +1,20 @@
+{
+  "project": "machine-commerce-proof",
+  "urls": [
+    "https://x402.org",
+    "https://www.8004.org"
+  ],
+  "public_directories": [
+    "https://registry.modelcontextprotocol.io/"
+  ],
+  "monitor": {
+    "timeoutSeconds": 10,
+    "intervalMinutes": 15
+  },
+  "pricing": {
+    "auditUsd": 39,
+    "implementationUsd": 149,
+    "verificationUsd": 0.01,
+    "proMonthlyUsd": 49
+  }
+}

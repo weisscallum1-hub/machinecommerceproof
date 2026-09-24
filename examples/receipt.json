@@ -1,0 +1,25 @@
+{
+  "schema": "mcp-receipt-v0.4",
+  "runId": "3e621664-a166-4b7e-a23f-96a8dddf9ee1",
+  "createdAt": "2026-09-23T19:27:11.998Z",
+  "agentId": "example-agent",
+  "action": "example-action",
+  "policy": "demo-only",
+  "inputHash": "sha256:b470e860b189e4402e68aa8788d1ff00c42855804c449ccc78c0720117fcbb55",
+  "outputHash": "sha256:4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+  "paymentId": null,
+  "payment": null,
+  "previousReceiptHash": null,
+  "provenance": {
+    "inputTrust": "untrusted",
+    "attestationScope": "integrity-only"
+  },
+  "signer": {
+    "algorithm": "Ed25519",
+    "keyFingerprint": "d919398976ce1c4ee7fa6a68f88a8da9",
+    "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAsnFGuIQPKF8w7Q7vCfnx8jeHo8XUqSOs6UkOdJEcxkA=\n-----END PUBLIC KEY-----\n",
+    "publicKeySpkiB64": "MCowBQYDK2VwAyEAsnFGuIQPKF8w7Q7vCfnx8jeHo8XUqSOs6UkOdJEcxkA="
+  },
+  "receiptHash": "sha256:c16ba05db43eeed81f5375fdc806872147c741487732a7be822b020b6d5df129",
+  "signature": "YJ3SkGX0vAd4GN5TEIU/pnQQ7TXR8gIP7dGQUKeOjGHYBP3ph0Ioloy/vFj3ycEVoy0hUrLI5GvfbwzO2GnYAg=="
+}

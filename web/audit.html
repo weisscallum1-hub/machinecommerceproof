@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Machine Commerce Proof — Audit</title>
+<style>body{font-family:system-ui,sans-serif;max-width:960px;margin:0 auto;padding:40px 20px;line-height:1.5;background:#0d1117;color:#e6edf3}h1{font-size:36px}.card{border:1px solid #30363d;border-radius:12px;padding:18px;margin:14px 0;background:#161b22}input{width:min(100%,720px);padding:10px;border-radius:8px;border:1px solid #30363d;background:#0b0f14;color:#e6edf3}button{padding:10px 14px;border-radius:8px;border:1px solid #30363d;background:#21262d;color:#e6edf3;cursor:pointer}pre{white-space:pre-wrap;overflow:auto;background:#0b0f14;padding:14px;border-radius:10px}.ok{font-weight:700}</style>
+</head>
+<body>
+<p>Machine Commerce Proof · v0.21.1</p>
+<h1>Operational audit</h1>
+<div class="card">
+<p>Enter a running MCR service URL. The audit intentionally excludes raw receipt inputs, outputs and payment details.</p>
+<input id="base" value="http://localhost:4020" aria-label="Service URL"/>
+<button id="run">Run audit</button>
+</div>
+<div class="card"><div id="status">Not checked.</div><pre id="out"></pre></div>
+<script>
+const baseInput=document.getElementById('base'), out=document.getElementById('out'), status=document.getElementById('status');
+const params=new URLSearchParams(location.search); if(params.get('base')) baseInput.value=params.get('base');
+async function run(){ status.textContent='Checking…'; out.textContent=''; try{ const base=baseInput.value.replace(/\/$/,''); const r=await fetch(base+'/v1/audit'); const t=await r.text(); const j=JSON.parse(t); status.textContent=r.ok&&j.operationalState==='healthy'&&j.receipts?.chainValid?'Healthy':'Degraded'; status.className=r.ok&&j.operationalState==='healthy'?'ok':''; out.textContent=JSON.stringify(j,null,2); }catch(e){ status.textContent='Unavailable'; out.textContent=e.message; }}
+document.getElementById('run').onclick=run; run();
+</script>
+</body></html>

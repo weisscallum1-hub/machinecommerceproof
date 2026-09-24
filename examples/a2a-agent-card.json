@@ -1,0 +1,71 @@
+{
+  "name": "Machine Commerce Proof Verifier",
+  "description": "A2A 1.0 service profile for synchronous receipt verification. This card is an implementation profile, not a claim of full A2A feature completeness.",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:4020/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    },
+    {
+      "url": "http://localhost:4020/message:send",
+      "protocolBinding": "HTTP+JSON",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "version": "0.15.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": [
+    "application/vnd.machine-commerce-proof+json",
+    "application/json",
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/vnd.machine-commerce-proof+json",
+    "application/json",
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "verify-receipt",
+      "name": "Verify Receipt",
+      "description": "Verify integrity, signature and signer fingerprint of a Machine Commerce Proof receipt.",
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "examples": [
+        "Verify this receipt."
+      ],
+      "tags": [
+        "proof",
+        "verification"
+      ]
+    },
+    {
+      "id": "verify-chain",
+      "name": "Verify Receipt Chain",
+      "description": "Validate the integrity and linkage of a local receipt chain.",
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "examples": [
+        "Verify the receipt chain."
+      ],
+      "tags": [
+        "proof",
+        "chain",
+        "verification"
+      ]
+    }
+  ]
+}

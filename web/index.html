@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Machine Commerce Proof — tamper-evident evidence for autonomous software actions." />
+<title>Machine Commerce Proof</title>
+<style>
+body{font-family:Inter,system-ui,sans-serif;max-width:960px;margin:0 auto;padding:48px 24px;line-height:1.5;background:#0d1117;color:#e6edf3}h1{font-size:46px;line-height:1.05;margin-bottom:12px}h2{margin-top:44px}.muted{color:#8b949e}.card{border:1px solid #30363d;border-radius:14px;padding:20px;margin:14px 0;background:#161b22}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}code{background:#21262d;padding:2px 5px;border-radius:6px}a{color:#58a6ff}.pill{display:inline-block;border:1px solid #30363d;padding:5px 9px;border-radius:999px;margin:4px 4px 0 0;font-size:13px}button{padding:10px 14px;border-radius:8px;border:1px solid #30363d;background:#21262d;color:#e6edf3;cursor:pointer}pre{white-space:pre-wrap;overflow:auto;background:#0b0f14;padding:14px;border-radius:10px}
+</style>
+</head>
+<body>
+<p class="muted">MACHINE COMMERCE PROOF · v0.21.1</p>
+<h1>Evidence for autonomous software.</h1>
+<p class="muted">Portable, tamper-evident receipts that connect an agent identity, policy, action, output hash and optional payment metadata.</p>
+<div class="grid">
+  <div class="card"><strong>Cryptographic</strong><br/>Ed25519 signatures and SHA-256 receipt chains.</div>
+  <div class="card"><strong>Machine-native</strong><br/>JSON APIs and a small JavaScript SDK.</div>
+  <div class="card"><strong>Protocol-adaptable</strong><br/>x402, MCP, ERC-8004 and A2A integration boundaries.</div>
+</div>
+<h2>Operator audit</h2>
+<div class="card"><p>Inspect chain health and signer metadata without exposing raw inputs or outputs.</p><a href="./audit.html">Open the audit dashboard →</a></div>
+<h2>Try the verifier</h2>
+<div class="card">
+  <p>Paste a receipt into the verifier and validate it locally in your browser.</p>
+  <a href="./verify.html">Open the receipt verifier →</a>
+</div>
+<h2>Minimal API example</h2>
+<div class="card"><pre>curl -s http://localhost:4020/v1/proof \
+  -H 'content-type: application/json' \
+  -d '{"agentId":"demo","action":"example-action","policy":"demo-only","input":{"resource":"example"},"output":{"ok":true}}'</pre></div>
+<h2>Integrity semantics</h2>
+<div class="card"><p>A valid receipt proves that the signed receipt payload has not been altered after signing. It does not independently prove that the external-world event occurred or that an output was truthful.</p></div>
+</body>
+</html>

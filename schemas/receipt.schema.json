@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://machine-commerce-proof.invalid/schemas/mcp-receipt-v0.4.schema.json",
+  "title": "Machine Commerce Proof Receipt v0.4",
+  "type": "object",
+  "required": ["schema", "runId", "createdAt", "agentId", "action", "policy", "inputHash", "outputHash", "previousReceiptHash", "provenance", "signer", "receiptHash", "signature"],
+  "properties": {
+    "schema": {"const": "mcp-receipt-v0.4"},
+    "runId": {"type": "string", "format": "uuid"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "agentId": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1},
+    "policy": {"type": "string", "minLength": 1},
+    "inputHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "outputHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "paymentId": {"type": ["string", "null"]},
+    "payment": {},
+    "provenance": {
+      "type": "object",
+      "required": ["inputTrust", "attestationScope"],
+      "properties": {
+        "inputTrust": {"const": "untrusted"},
+        "attestationScope": {"const": "integrity-only"}
+      },
+      "additionalProperties": false
+    },
+    "previousReceiptHash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "signer": {
+      "type": "object",
+      "required": ["algorithm", "keyFingerprint"],
+      "properties": {
+        "algorithm": {"const": "Ed25519"},
+        "keyFingerprint": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+        "publicKeyPem": {"type": "string", "minLength": 1},
+        "publicKeySpkiB64": {"type": "string", "minLength": 1}
+      },
+      "oneOf": [
+        {"required": ["publicKeyPem"]},
+        {"required": ["publicKeySpkiB64"]}
+      ],
+      "additionalProperties": false
+    },
+    "receiptHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "signature": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

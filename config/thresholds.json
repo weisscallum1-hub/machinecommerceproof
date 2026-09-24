@@ -1,0 +1,17 @@
+{
+  "revenue": {
+    "dailyGrossTargetUsd": 100,
+    "warningBelowTargetDays": 7
+  },
+  "product": {
+    "minimumPaidExperimentsBeforePositioningShift": 10,
+    "reviewCyclesBeforeRetiringFeature": 3
+  },
+  "autonomy": {
+    "autoPublish": false,
+    "autoSendOutboundMessages": false,
+    "autoDeployToken": false,
+    "autoTrade": false,
+    "autoCustody": false
+  }
+}

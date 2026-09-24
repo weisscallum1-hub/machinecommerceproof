@@ -1,0 +1,11 @@
+{
+  "name": "machine-commerce-proof-server",
+  "version": "0.21.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "selftest": "node src/selftest.js"
+  }
+}

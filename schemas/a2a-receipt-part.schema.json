@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Machine Commerce Proof A2A Receipt Part",
+  "type": "object",
+  "required": [
+    "data",
+    "mediaType"
+  ],
+  "properties": {
+    "mediaType": {
+      "const": "application/vnd.machine-commerce-proof+json"
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "type",
+        "version",
+        "receipt"
+      ],
+      "properties": {
+        "type": {
+          "const": "machine-commerce-proof/receipt"
+        },
+        "version": {
+          "type": "string"
+        },
+        "receipt": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

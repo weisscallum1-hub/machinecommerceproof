@@ -1,0 +1,30 @@
+name: official-sdk-interop
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - 'sdk/**'
+      - 'tests/official-sdk-interop.mjs'
+      - 'schemas/**'
+      - 'config/**'
+      - 'package.json'
+      - 'server/package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  official-sdk-interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install official protocol SDKs
+        run: npm install --no-save --ignore-scripts @a2a-js/sdk@1.0.1 @modelcontextprotocol/core@2.0.0
+      - name: Run official SDK interoperability checks
+        run: npm run official-sdk-interop

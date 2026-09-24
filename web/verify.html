@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Machine Commerce Proof — Verify Receipt</title>
+<style>body{font:16px system-ui;max-width:900px;margin:40px auto;padding:0 20px;background:#0d1117;color:#e6edf3}textarea{width:100%;box-sizing:border-box;background:#161b22;color:#e6edf3;border:1px solid #30363d;border-radius:8px;padding:10px;margin:6px 0 14px}button{padding:10px 14px}pre{white-space:pre-wrap;background:#161b22;padding:14px;border-radius:8px}.muted{color:#8b949e}</style></head>
+<body><h1>Receipt Verifier</h1><p class="muted">Verification happens locally in your browser. The receipt's embedded Ed25519 public key is used; nothing is uploaded.</p>
+<label>Receipt JSON</label><textarea id="receipt" rows="20" placeholder='Paste a complete receipt JSON object here'></textarea>
+<button onclick="verify()">Verify receipt</button><pre id="out"></pre>
+<script>
+const enc=new TextEncoder();
+function canonical(v){if(v===null)return'null';if(typeof v!=='object')return JSON.stringify(v);if(Array.isArray(v))return`[${v.map(canonical).join(',')}]`;return`{${Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')}}`}
+function b64ToBytes(s){const b=atob(s);return Uint8Array.from(b,c=>c.charCodeAt(0))}
+function pemToDer(p){return b64ToBytes(p.replace(/-----[^-]+-----/g,'').replace(/\s/g,''))}
+async function sha256(s){return crypto.subtle.digest('SHA-256',enc.encode(s))}
+function hex(b){return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function verify(){const out=document.getElementById('out');try{const r=JSON.parse(document.getElementById('receipt').value);if(!r?.signer?.publicKeyPem&&!r?.signer?.publicKeySpkiB64)throw new Error('Receipt does not contain a supported public key encoding');const der=r.signer.publicKeySpkiB64?b64ToBytes(r.signer.publicKeySpkiB64):pemToDer(r.signer.publicKeyPem);if(!der.length)throw new Error('Receipt does not contain a supported public key encoding');const key=await crypto.subtle.importKey('spki',der,{name:'Ed25519'},false,['verify']);const signerFingerprint=hex(await sha256(der)).slice(0,32);const cObj={...r,signer:r.signer?{...r.signer}:r.signer};delete cObj.signature;delete cObj.signer?.publicKeyPem;delete cObj.signer?.publicKeySpkiB64;const sigOk=await crypto.subtle.verify('Ed25519',key,b64ToBytes(r.signature),enc.encode(canonical(cObj)));const hObj={...cObj};delete hObj.receiptHash;const hashOk=r.receiptHash==='sha256:'+hex(await sha256(canonical(hObj)));const fpOk=signerFingerprint===r.signer.keyFingerprint;out.textContent=JSON.stringify({verified:sigOk&&hashOk&&fpOk,signatureValid:sigOk,hashValid:hashOk,signerFingerprintValid:fpOk,keyFingerprint:signerFingerprint,attestationScope:r.provenance?.attestationScope||'unspecified'},null,2)}catch(e){out.textContent='Verification error: '+e.message}}
+</script></body></html>

@@ -1,0 +1,28 @@
+name: daily-ops
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 5 * * *'
+permissions:
+  contents: read
+jobs:
+  ops:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.12'}
+      - name: Run risk gate
+        run: python agents/risk.py
+      - name: Find public research leads
+        run: python agents/lead_finder.py
+      - name: Produce strategy snapshot
+        run: python agents/strategy.py
+      - name: Draft ecosystem content
+        run: python agents/content.py
+      - name: Upload generated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-ops-${{ github.run_number }}
+          path: artifacts/
+          if-no-files-found: ignore

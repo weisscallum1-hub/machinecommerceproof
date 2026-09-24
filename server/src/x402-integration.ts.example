@@ -1,0 +1,17 @@
+// Reference only. x402 v2 packages move quickly; verify the current package
+// versions/API before production deployment.
+//
+// npm install @x402/core @x402/evm @x402/express @coinbase/x402
+//
+// The official x402 project currently documents one-line middleware patterns
+// and Base/other network implementations. Keep this adapter isolated so the
+// evidence layer survives payment-rail changes.
+//
+// Example shape:
+//
+// paymentMiddleware(...)
+//   -> /v1/proof/deep = $0.01 USDC
+//   -> verify payment
+//   -> execute proof generation
+//   -> attach payment correlation id
+//   -> return receipt

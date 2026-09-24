@@ -1,0 +1,22 @@
+name: ecosystem-scout
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * *'
+permissions:
+  contents: read
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.12'}
+      - run: python agents/scout.py
+      - run: python agents/content.py
+      - name: Upload scout artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecosystem-scout-${{ github.run_number }}
+          path: artifacts/
+          if-no-files-found: ignore

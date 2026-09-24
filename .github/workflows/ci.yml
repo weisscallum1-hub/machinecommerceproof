@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Node self-test
+        run: npm test
+      - name: Python compile check
+        run: python -m compileall -q agents
+      - name: Worker syntax check
+        run: node --check cloudflare-worker/src/index.js
+      - name: Release gate
+        run: npm run release-check
+      - name: JSON validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in list(Path('config').glob('*.json')) + [Path('schemas/receipt.schema.json')]:
+              json.loads(p.read_text())
+          print('json ok')
+          PY

@@ -1,0 +1,7 @@
+# Machine Commerce Proof
+
+Machine Commerce Proof provides tamper-evident receipts for AI-agent actions.
+
+Core concepts: agent identity, action, policy, input hash, output hash, payment correlation, signature, chain verification.
+
+The product is protocol-agnostic. x402 is an optional payment adapter; ERC-8004 is an identity/reputation integration target; MCP/A2A are capability/discovery integration targets.

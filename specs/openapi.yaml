@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: Machine Commerce Proof API
+  version: 0.21.1
+  description: Portable signed execution receipts for agentic commerce.
+servers:
+  - url: http://localhost:4020
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200': {description: OK}
+  /v1/proof:
+    post:
+      summary: Create a signed receipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                agentId: {type: string}
+                action: {type: string}
+                policy: {type: string}
+                input: {}
+                output: {}
+                paymentId: {type: [string, 'null']}
+                payment: {}
+      responses:
+        '200': {description: Receipt created}
+        '400': {description: Invalid request}
+        '413': {description: Request too large}
+  /v1/verify:
+    post:
+      summary: Verify a receipt independently
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [receipt]}
+      responses:
+        '200': {description: Verification result}
+  /v1/audit:
+    get:
+      summary: Return a privacy-safe operational audit snapshot
+      responses:
+        '200': {description: Audit snapshot}
+  /v1/receipt/{runId}/verification:
+    get:
+      summary: Verify one stored receipt by run ID
+      parameters:
+        - {name: runId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200': {description: Receipt verification result}
+        '404': {description: Not found}
+  /v1/verify-chain:
+    get:
+      summary: Verify the local append-only chain
+      responses:
+        '200': {description: Chain verification result}
+  /v1/receipts:
+    get:
+      summary: List recent receipts
+      responses:
+        '200': {description: Receipt list}
+  /v1/receipt/{runId}:
+    get:
+      summary: Fetch one receipt by run ID
+      parameters:
+        - {name: runId, in: path, required: true, schema: {type: string}}
+      responses:
+        '200': {description: Receipt}
+        '404': {description: Not found}

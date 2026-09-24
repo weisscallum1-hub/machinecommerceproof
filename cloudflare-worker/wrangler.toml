@@ -1,0 +1,15 @@
+name = "machine-commerce-proof"
+main = "src/index.js"
+compatibility_date = "2026-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "machine-commerce-proof"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[vars]
+X402_NETWORK = "eip155:8453"
+X402_AMOUNT = "10000"
+X402_ASSET = "REPLACE_WITH_USDC_ASSET_ADDRESS"
+X402_PAY_TO = "REPLACE_WITH_RECEIVING_ADDRESS"
+X402_MAX_TIMEOUT = "60"

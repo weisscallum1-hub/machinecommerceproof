@@ -1,0 +1,22 @@
+name: health-check
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+permissions:
+  contents: read
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    env:
+      MCP_HEALTH_URL: ${{ secrets.MCP_HEALTH_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.12'}
+      - name: Check configured service
+        if: env.MCP_HEALTH_URL != ''
+        run: python agents/health.py "$MCP_HEALTH_URL"
+      - name: Explain skipped check
+        if: env.MCP_HEALTH_URL == ''
+        run: echo 'MCP_HEALTH_URL is not configured; health probe skipped.'
