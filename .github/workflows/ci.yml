@@ -22,7 +22,13 @@ jobs:
       - name: Node self-test
         run: npm test
       - name: Python compile check
-        run: python -m compileall -q agents
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for source in Path('agents').glob('*.py'):
+              compile(source.read_text(), str(source), 'exec')
+          print('python syntax ok')
+          PY
       - name: Worker syntax check
         run: node --check cloudflare-worker/src/index.js
       - name: Release gate
