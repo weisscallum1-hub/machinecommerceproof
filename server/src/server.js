@@ -232,6 +232,15 @@ function a2aError(id, code, message, data = undefined) {
   return { jsonrpc: '2.0', id: id ?? null, error };
 }
 
+function a2aErrorInfo(reason, metadata = {}) {
+  return [{
+    '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+    reason,
+    domain: 'a2a-protocol.org',
+    metadata,
+  }];
+}
+
 function validateA2ARequest(req, contentType = '') {
   const version = req.headers['a2a-version'];
   if (version !== '1.0') return { status: 400, body: { type: 'https://a2a-protocol.org/errors/version-not-supported', title: 'Protocol Version Not Supported', status: 400, detail: 'The requested A2A protocol version is not supported by this service', supportedVersions: ['1.0'] } };
@@ -252,7 +261,7 @@ function handleA2ARpc(request) {
     const id = request.params?.id;
     if (typeof id !== 'string' || !id) return a2aError(request.id, -32602, 'task id is required');
     const task = getTasks().find(t => t.id === id);
-    if (!task) return a2aError(request.id, -32001, 'Task not found');
+    if (!task) return a2aError(request.id, -32001, 'Task not found', a2aErrorInfo('TASK_NOT_FOUND', { taskId: id }));
     const historyLength = Number.isFinite(Number(request.params.historyLength)) ? Math.max(0, Math.floor(Number(request.params.historyLength))) : null;
     return a2aJsonRpcResponse(request.id, { ...task, history: sliceHistory(task.history, historyLength) });
   }
@@ -616,7 +625,7 @@ const server = http.createServer(async (req, res) => {
       const versionError = validateA2ARequest(req, req.headers['content-type'] || '');
       if (versionError) {
         if (url.pathname === '/message:send') return a2aJson(res, versionError.status, versionError.body, { 'content-type': 'application/problem+json' });
-        return a2aJson(res, versionError.status, a2aError(null, -32001, versionError.body.detail, { supportedVersions: ['1.0'] }));
+        return a2aJson(res, versionError.status, a2aError(null, -32009, versionError.body.detail, a2aErrorInfo('VERSION_NOT_SUPPORTED', { supportedVersions: ['1.0'] })));
       }
       let payload;
       try { payload = await body(req); } catch (err) {
@@ -634,7 +643,14 @@ const server = http.createServer(async (req, res) => {
       if (versionError) return a2aJson(res, versionError.status, versionError.body, { 'content-type': 'application/problem+json' });
       const taskId = decodeURIComponent(url.pathname.slice('/tasks/'.length));
       const task = getTasks().find(t => t.id === taskId);
-      if (!task) return a2aJson(res, 404, { type: 'https://a2a-protocol.org/errors/task-not-found', title: 'Task Not Found', status: 404, detail: 'The requested task was not found' }, { 'content-type': 'application/problem+json' });
+      if (!task) return a2aJson(res, 404, {
+        error: {
+          code: 404,
+          status: 'NOT_FOUND',
+          message: 'The specified task ID does not exist or is not accessible',
+          details: a2aErrorInfo('TASK_NOT_FOUND', { taskId, timestamp: new Date().toISOString() }),
+        },
+      }, { 'content-type': 'application/a2a+json' });
       const rawHistoryLength = url.searchParams.get('historyLength');
       const historyLength = rawHistoryLength != null && Number.isFinite(Number(rawHistoryLength)) ? Math.max(0, Math.floor(Number(rawHistoryLength))) : null;
       return a2aJson(res, 200, { ...task, history: sliceHistory(task.history, historyLength) }, { 'content-type': 'application/a2a+json', 'cache-control': 'no-store' });

@@ -20,6 +20,7 @@ Version: 0.21.1
 - Secret/generated-file audit
 - Docker image build and Compose runtime, including container healthcheck and `/health`, `/.well-known/agent-card.json`, and `/v1/stats` endpoints
 - Official A2A JavaScript SDK client interoperability and MCP official core schema validation
+- A2A profile edge cases across JSON-RPC and HTTP+JSON, including version negotiation, task history, invalid requests, and protocol error mappings
 
 ## Not verified here
 
@@ -28,7 +29,7 @@ Version: 0.21.1
 
 ## GitHub state
 
-The project is prepared for a brand-new repository only. Existing user repositories were not modified. Account-level repository creation must be performed externally before publication.
+Published to the public `weisscallum1-hub/machinecommerceproof` repository on `main`. The latest CI and official SDK interoperability workflows passed. Static-site and API hosting have not been configured.
 
 - Production security hardening: configurable CORS, proof-write/admin bearer authorization, rate limiting, security headers, and request correlation.
 - Configuration template and high-entropy secret generator.

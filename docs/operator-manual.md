@@ -187,9 +187,11 @@ The container image is intended for a prototype/operator deployment. Put authent
 
 ## 12. Deployment
 
-The supported prototype path is:
+The recommended prototype split for this release is:
 
-`GitHub Pages (static web) + Cloudflare Workers/D1 (API) + GitHub Actions (automation)`
+`Static host (web demo) + Docker-capable host (Node API) + GitHub Actions (automation)`
+
+The Cloudflare Worker is a separate prototype and does not implement A2A task endpoints or the Node server's authorization behavior. See `docs/deployment.md` before choosing it for a public API.
 
 Read:
 
@@ -225,14 +227,12 @@ Then review the official protocol release notes before changing adapters.
 
 ## 15. Publication workflow
 
-For the first public repository:
+For the public repository:
 
-1. Create a new empty repository named `machine-commerce-proof`.
-2. Publish this source tree to that repository.
-3. Confirm GitHub Actions are enabled.
-4. Run the CI and official-SDK interoperability jobs.
-5. Configure only the secrets you actually need.
-6. Deploy the static site and API separately.
+1. Repository `weisscallum1-hub/machinecommerceproof` is published on `main`.
+2. The latest CI and official-SDK interoperability jobs have passed.
+3. Configure static-site and API hosting separately if desired.
+4. Configure only the secrets the chosen deployment needs; never commit deployment secrets.
 
 The project is designed so that repository automation does not mutate source code during scheduled research runs.
 
